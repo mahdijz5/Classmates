@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en" class="rtl">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title><%= pageTitle %></title>
+		<link rel="stylesheet" href="/bootstrap.css" />
+		<link rel="stylesheet" href="/css/dash-style.css" />
+		<link rel="stylesheet" href="/css/style.css" />
+		<link rel="stylesheet" href="/hover.css" />
+		<link rel="stylesheet" href="/font-awesome.min.css" />
+		<% if(path == '/setting') { %>
+			<link rel="stylesheet" href="/css/setting.css">
+		<% } %>  
+        <script src="https://cdn.ckeditor.com/4.17.1/standard/ckeditor.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.8/clipboard.min.js"></script>
+	</head>
+	<body class="rtl">
+		<div class="row" id="container">
+			<div class="col-lg-3 m-0 pl-5 bg-success" id="sidebar">
+				<%- include('../includes/dashSidebar.ejs') %>
+			</div>
+			<div class="col-lg-9 m-0 p-0" id="body">
+				<%- include('../includes/dashnavbar.ejs') %>
+				<div id="footer"><%- include('../includes/footer.ejs') %></div>
+				<div id="blogs" class="p-4"><%- body %></div>
+			</div>
+		</div>
+	</body>
+	<script>
+        new ClipboardJS('.imageUploader');
+		CKEDITOR.replace( 'bodyInp',{
+			filebrowserUploadUrl: '/admin/uploader'
+		} );
+	</script>
+	<script src="/bootstrap.js"></script>
+	<script src="/js/size.js"></script>
+	<script src="/js/upload.js"></script>
+	<script src="/js/dash.js"></script>
+	<% if(path == '/setting') { %>
+		<script src="/js/setting.js"></script>
+	 
+	<% } %>  
+	</html>

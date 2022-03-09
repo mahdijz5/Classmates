@@ -1,0 +1,5 @@
+<% if(sidebarPost.length > 0 ){ %>
+    <% for(post of sidebarPost) { %>
+        <a class="sidebar-items" href="/post/<%=post.id%> "><%= post.title  %> </a> <br />
+    <%}  %>  
+<% } %>  

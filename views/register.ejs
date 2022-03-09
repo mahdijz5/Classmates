@@ -1,0 +1,46 @@
+<div class="mx-auto text-center w-25 col-lg-12 bg-light" id="loginCard">
+	<div class="bg-success mx-auto text-center text-light pt-4" id="loginTitle">
+		<h4>ثبت نام</h4>
+	</div>
+	<form action="/user/register" method="post">
+		<div class="input-group mb-3">
+			<input
+				name="username"
+				type="text"
+				class="form-control"
+				placeholder="User name"
+				aria-label=""
+				aria-describedby="basic-addon1"
+				required
+			/>
+		</div>
+		<div class="input-group mb-3">
+			<input
+				name="password"
+				type="password"
+				class="form-control"
+				placeholder="Password"
+				aria-label="Password"
+				aria-describedby="basic-addon1"
+				required
+			/>
+		</div>
+		<div class="input-group mb-3">
+			<input
+				name="confirmPassword"
+				type="password"
+				class="form-control"
+				placeholder="Confirm password"
+				aria-label="Password"
+				aria-describedby="basic-addon1"
+				required
+			/>
+		</div>
+		<div class="input-group mb-3">
+			<button type="submit" class="form-control btn btn-success">تایید</button>
+		</div>
+	</form>
+	<% if(typeof errors !== "undefined") {%> <%= errors %> <% }%>
+	<br />
+	<a href="/user/login" class="link-primary">قبلا حساب کاربری ساخته ام</a>
+</div>

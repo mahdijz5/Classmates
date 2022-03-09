@@ -1,0 +1,16 @@
+<nav class="navbar navbar-expand navbar-dark bg-dark text " id="navbar">
+	<div class="container-fluid">
+		<div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+			<div class="navbar-nav text-light">
+				<a class="nav-link text-light fa fa-bars d-none" id="sidebarTrigger" aria-current="page" href="#"> </a>
+				<a class="nav-link text-light fa fa-home" aria-current="page" href="/"> </a>
+				<a class="nav-link text-light fa fa-sign-out" aria-current="page" href="/user/logout"> </a>
+				<form action="/user/logout" method="post"></form>
+				<a href="/admin/setting"><img id="profileImg" src="/uploads/profile/<%=req.user.profileImg %> " alt="profileImg"> </a>
+			</div>
+			<div class="search">
+				<%- include('./dashSearch.ejs') %> 
+			</div>
+		</div>
+	</div>
+</nav>

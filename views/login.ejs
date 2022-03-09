@@ -1,0 +1,51 @@
+<div class=" mx-auto text-center w-25 col-lg-12 bg-light" id="loginCard">
+    <div class="bg-success mx-auto text-center text-light pt-4 " id="loginTitle">
+        <h4>
+            ورود
+        </h4>
+    </div>
+    <form action="/user/login" method="post">
+        <div class="input-group mb-3   ">
+            <input
+            name="username"
+                type="text"
+                class="form-control"
+                placeholder="User name"
+                aria-label="usernaame"
+                aria-describedby="basic-addon1"
+                required
+            />
+        </div>
+        <div class="input-group mb-3  ">
+            <input
+            name="password"
+                type="password"
+                class="form-control"
+                placeholder="Password"
+                aria-label="Password"
+                aria-describedby="basic-addon1"
+                required
+            />
+        </div>
+        <div class=" checkbox mb-3">
+            <label class="my-2">
+                مرا بخاطر بسپار <input type="checkbox" value="remember-me" name="remember"> 
+            </label>
+        </div>
+        <div class="input-group mb-3  ">
+            <button type="submit" class="form-control btn btn-success">تایید</button>
+
+        </div>
+           
+ 
+        <%    if(typeof errors !== "undefined") {%> 
+            <%= errors %> 
+        <%  }%> 
+        <br>
+        <a href="/user/register" class="link-primary">حساب کاربری ندارم</a>  
+    </form>
+
+    <p><%- include('./includes/loginAlerts.ejs') %> </p>
+    
+</div>
+

@@ -1,0 +1,37 @@
+<section class="mb-5 rtl">
+    <div class="card bg-light">
+        <div class="card-body">
+            <!-- Comment form-->
+            <form  action="/post/comments/<%= post.id %>  " method="post" class="mb-4">
+                <textarea name="text" class="form-control" rows="4" placeholder="نظر خود را بنویسید"><%    if(typeof errors !== "undefined") {%><%= errors %><%  } %></textarea>
+                <button type="sumbit" class="btn btn-success mt-3"> تایید</button>
+            </form>
+            
+            <% if(comments.length > 0) { %>
+                <% for(comment of comments) { %> 
+            <!-- Single comment-->
+            <div class=" p-3 d-block" id="comment">
+                <div>
+                    <div class="flex-shrink-0"><img class="rounded-circle" id="commenterProf"
+                        src="/uploads/profile/<%= comment.user.profileImg  %> " alt="..." />
+                    </div>
+                <div class="ms-3 mb-3">
+                    <div class="fw-bold"><%= comment.user.username  %> </div>
+                    <%= comment.text %> 
+                </div>
+
+
+                <form  id="replyForm" action="/post/reply/<%= comment.id %> "  method="post">
+                    <textarea name="text" id="" class="form-control" cols="10" rows="3" placeholder="پاسخ دادن"></textarea>
+                    <button class="btn btn-success text-light m-2">تایید</button>
+                </form>
+
+                <%- comment.reply  %> 
+                </div>                
+            </div>
+                <% } %> 
+            <% } %> 
+       
+    </div>
+</section>
+

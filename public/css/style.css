@@ -1,0 +1,87 @@
+@import url("https://fonts.googleapis.com/css2?family=Lalezar&family=Markazi+Text:wght@500&family=Roboto:wght@300&display=swap");
+
+* {
+	font-family: "Roboto", "Markazi Text", serif;
+	text-align: right;
+}
+
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: "Lalezar", cursive;
+}
+
+#topWeblog {
+	background-image: cover;
+	max-height: 650px;
+}
+
+#header {
+	width: 100%;
+	background-image: url("/img/school.jpg");
+	height: 650px;
+
+	background-size: cover;
+
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-clip: padding-box;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+#introduce {
+	border-radius: 20px;
+	margin-top: 200px;
+	margin: auto auto;
+	text-align: center;
+	padding: 50px;
+	width: 400px;
+	color: white;
+	background-color: rgba(0, 0, 0, 0.4);
+}
+
+#sidebar {
+	text-align: right;
+}
+
+#post > img {
+	max-height: 300px;
+	min-height: 300px;
+}
+#post > .card-body {
+	max-height: 200px;
+	min-height: 200px;
+}
+
+#pagination {
+	margin: 50px 0 ;
+	height: 50px;
+	position: relative;
+}
+
+.pagination {
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	-ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%);
+	
+}
+
+#mainNav {
+	margin-left: auto;
+	margin-right: 10px !important;
+}
+
+.sidebar-items {
+	font-size: 20px ;
+	text-decoration: none;
+}
+
