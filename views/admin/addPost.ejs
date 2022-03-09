@@ -1,0 +1,146 @@
+<form action="/admin/addPost" method="post" enctype="multipart/form-data" class="rtl">
+	<div class="mb-3 row">
+		<div class="col-sm-10">
+			<input type="text" class="form-control" id="titleInp" name="title" />
+		</div>
+		<label for="titleInp" class="col-sm-2 col-form-label">:عنوان</label>
+	</div>
+	
+
+	<div class="mb-3 row">
+		
+		<div class="col-sm-10">
+			<input type="file" class="form-control" id="thumbnail" name="thumbnail" />
+		</div>
+		<label for="thumbnail" class="col-sm-2 col-form-label">:عکس بند انگشتی</label>
+	</div>
+
+	<div class="mb-3 row">
+		<!-- Trigger -->
+		<div class="col-sm-1 ">
+			<span class="imageUploader btn btn-dark " data-clipboard-target="#foo">
+				<i class="fa fa-clipboard"></i>
+			</span>
+		</div>
+
+		
+		<!-- Target -->
+		<div class="col-sm-10 text-center">
+			<input
+			type="file"
+			id="uploadInp"
+			class="form-control d-inline-block"
+			placeholder='sdsasdsa'
+			/>
+			<p id="foo"></p>
+		</div>
+		
+		<!-- upload -->
+		<div class="col-sm-1 ">
+			<span class="imageUploader btn btn-dark " id="uploadImg" data-clipboard-target="#foo">
+				<i class="">:آپلود</i>
+			</span>
+		</div>
+	</div>
+
+	<div class="mb-3 row">
+		
+		<div class="col-sm-10">
+			<textarea
+				name="body"
+				id="bodyInp"
+				cols="10"
+				rows="10"
+				class="h-100 w-100"
+			></textarea>
+		</div>
+		<label for="bodyInp" class="col-sm-2 col-form-label"> :متن</label>
+	</div>
+	<div class="mb-3 row">
+		<div class="col-sm-10">
+			<select name="status" id="statusInp" class="form-control">
+				<option value="public">عمومی</option>
+				<option value="private">خصوصی</option>
+			</select>
+		</div>
+		<label for="statusInp" class="col-sm-2 col-form-label">:وضعیت</label>
+	</div>
+	
+	<div class="mb-3 row">
+		
+		<div class="col-sm-10">
+			<select name="grade" id="gradeInp" class="form-control">
+				<option value="others"> سایر موارد
+				</option>
+				<option value="firstbas">اول ابتدایی</option>
+				<option value="secondbas">دوم ابتدایی</option>
+				<option value="thirdBas"> سوم ابتدایی</option>
+				<option value="fourth">چهارم ابتدایی</option>
+				<option value="fifthBas">پنجم ابتدایی</option>
+				<option value="sixthtBas">ششم ابتدایی</option>
+				<option value="seventh">پایه هفتم
+				</option>
+				<option value="eighth">پایه هشتم
+				</option>
+				<option value="ninethe">پایه نهم
+				</option>
+			</select>
+		</div>
+		<label for="gradeInp" class="col-sm-2 col-form-label"> پایه</label>
+	</div>
+	<div class="mb-3 row">
+		
+		<div class="col-sm-10">
+			<select name="book" id="bookInp" class="form-control">
+				<option value="others"> سایر موارد
+				</option>
+				<option value="quran">
+					آموزش قران
+				</option>
+				<option value="farsi">
+					نگارش فارسی و ادبیات فارسی
+				</option>
+				<option value="oloom">
+					علوم تجربی
+				</option>
+				<option value="math">
+					ریاضی
+				</option>
+				<option value="payam">
+					پیام های آسمانی
+				</option>
+				<option value="motaleat">
+					مطالعات اجتماعی
+				</option>
+				<option value="tafakor">
+					تفکر و پژوهش
+				</option>
+				<option value="fanavari">
+					کار و فناوری
+				</option>
+				<option value="arabic">
+					عربی
+				</option>
+				<option value="english">
+					زبان انگلیسی
+				</option>
+				<option value="honar">
+					فرهنگ و هنر
+				</option>
+				<option value="amadegi">
+					امادگی دفاعی
+				</option>
+				
+			</select>
+		</div>
+		<label for="bookInp" class="col-sm-2 col-form-label"> :کتاب</label>
+	</div>
+	<div class="text-center">
+		<%    if(typeof errors !== "undefined") {%> 
+			<%= errors %> 
+		<%  }%>
+	</div>
+	<div class="mb-3 row">
+		<button class="col-1 btn btn-success" type="submit">Submit</button>
+	</div>
+</form>

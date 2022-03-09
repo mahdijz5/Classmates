@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-12 col-lg-10 col-xl-8 mx-auto">
+            <h2 class="h3 mb-4 page-title pt-3">تنظیمات</h2>
+            <div class="my-4">
+                <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+                    <li class="nav-item">
+                        <a class="nav-link setting-tabs active" id="profileTab" data-toggle="tab" href="#profile" role="tab"
+                            aria-controls="home" aria-selected="false">پروفایل</a>
+                    </li>
+                    <li class="nav-item">
+                        <!-- <a class="nav-link  " id="passwordTab" data-toggle="tab" href="#password" role="tab"
+                            aria-controls="password" aria-selected="true">پروفایل</a> -->
+                        <a class="nav-link setting-tabs " id="passwordTab" data-toggle="tab" aria-selected="false"
+                            href="#password">تغییر رمز</a>
+                    </li>
+                </ul>
+                <div id="profile" class="tab ">
+                    <div>
+                        <%- include('./includes/profile.ejs') %>
+                    </div>
+                </div>
+
+                <div id="password" class=" d-none tab">
+                    <div>
+                        <%- include('./includes/changePassword.ejs') %>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+

@@ -1,0 +1,77 @@
+<form action="/admin/changeProfile" method="POST" enctype="multipart/form-data">
+    <div class="row mt-5 align-items-center ">
+        <div class="col-md-3 text-center mb-5">
+            <div class="avatar avatar-xl">
+                <input type="file" name="profileImg" id="uploadProfileImg" hidden />
+                <% if(req.user.profileImg) { %>
+                    <label for="uploadProfileImg">
+                        <a class="btn">
+                            <img src="/uploads/profile/<%=req.user.profileImg %> " alt=" عکس پروفایل"
+                                title="تغییر عکس پروفایل" class="avatar-img rounded-circle" />
+                        </a>
+                    </label>
+                    <% }else{ %>
+                        <label for="uploadProfileImg">
+                            <a class="btn">
+                                <img src="/uploads/profileImg/profileImg.png " alt=" عکس پروفایل"
+                                    title="تغییر عکس پروفایل" class="avatar-img rounded-circle" />
+                            </a>
+                            <% } %>
+            </div>
+        </div>
+        <div class="col">
+            <div class="row align-items-center">
+                <div class="col-md-7">
+                    <h4 class="mb-5 text-center text-md-left">
+                        <%= req.user.username %>
+                            <p class="small mb-3"><span class="badge badge-light text-dark">
+                                    <%= convertDate(req.user.createAt) %>
+                                </span>
+                                <a class=" btn btn-danger fa fa-sign-out fa-2x mt-1 " id="logout"
+                                    href="/user/logout"></a>
+                            </p>
+                    </h4>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <hr class="my-4" />
+    <div class="form-row">
+        <div class="form-group col-12">
+            <label for="firstname">نام کاربری</label>
+            <input type="text" name="username" id="firstname" class="form-control" value=" <%=req.user.username %>" />
+
+        </div>
+    </div>
+
+
+    </div>
+    <hr class="my-4" />
+    <div class="row mb-4">
+        <div class="col-md-6">
+            <div class="form-group">
+                <label for="inputPassword4">رمز عبور گذشته</label>
+                <input type="password" name="password" class="form-control" id="inputPassword5" />
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <ul class="small text-muted pl-4 mb-0 text-danger">
+
+
+                <i>
+                    <%    if(typeof error !== "undefined") {%> 
+                        <%= error %> <br>
+                    <%  }%> 
+                    <%    if(typeof errors !== "undefined") {%> 
+                        <%= errors %> <br>
+                    <%  }%> 
+                </i>
+
+            </ul>
+        </div>
+
+    </div>
+    <button type="submit" class="btn btn-primary"> ذخیره تغیرات </button>
+</form>

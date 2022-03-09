@@ -1,0 +1,40 @@
+
+    <!-- Page content-->
+    <div class="container mt-5">
+        <div class="row px-5" >
+            <div class="col-12 ">
+                <!-- Post content-->
+                <article >
+                    <!-- Post header-->
+                    <header class="mb-4">
+                        <!-- Post title-->
+                        <h1 class="fw-bolder mb-1">
+                            <%= post.title %>
+                        </h1>
+                        <!-- Post meta content-->
+                        <div class="text-muted fst-italic mb-2">ساخته شده در تاریخ <%= convertDate(post.createdOn) %>
+                                توسط <a href="/profile/<%= post.user.id %> ">
+                                    <%= post.user.username%>
+                                </a>
+                        </div>
+
+                    </header>
+                    <!-- Preview image figure-->
+                    <figure class="mb-4">
+                        <img class="img-fluid rounded"
+                            src="http://localhost:3000/uploads/thumbnail/<%= post.thumbnail %>" alt="" />
+
+                    </figure>
+                    <!-- Post content-->
+                    <section class="mb-5" id="cardBody">
+                        <div class="fs-5 mb-4" id="body">
+                            <%-post.body%>
+                        </div>
+                    </section>
+                </article>
+                <!-- Comments section-->
+                <%- include('./includes/postComments.ejs') %> 
+            </div>
+
+        </div>
+    </div>

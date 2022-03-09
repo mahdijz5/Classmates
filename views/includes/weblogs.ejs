@@ -1,0 +1,22 @@
+<% if(posts.length > 0)  {%>
+	<% for(post of posts) {%>
+		<div class="col-lg-4" id="postCard">
+			<div class="card p-2" style="" id="post">
+				<img
+					src="http://localhost:3000/uploads/thumbnail/<%= post.thumbnail%>"
+					class="card-img-top"
+					alt="..."
+					id="postImg"
+				/>
+				<div class="card-body">
+					<h5 class="card-title"><%= post.title %> </h5>
+					<p class="card-text">
+						<%- truncate(post.body ,20) %> 
+						 
+					</p>
+					<a href="/post/<%= post.id %> " class="btn btn-primary">... ادامه</a>
+				</div>
+			</div>
+		</div>
+	<% } %>  
+<% } %>  

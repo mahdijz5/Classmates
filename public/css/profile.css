@@ -1,0 +1,18 @@
+.profile-head {
+    transform: translateY(5rem)
+}
+
+.cover {
+    
+}
+
+body {
+    /* background: #654ea3;
+    background: linear-gradient(to right, #C5E8B7, #ABE098 , #83D475 ,#57C84D,#2EB62C);
+    min-height: 100vh;
+    overflow-x: hidden */
+}
+
+.card img {
+     height: 100px !important;
+}
