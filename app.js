@@ -6,7 +6,6 @@ const session = require('express-session');
 const express = require('express');
 const fileUpload = require('express-fileupload')
 const ejsLayout = require('express-ejs-layouts');
-const mongoose = require('mongoose');
 const passport = require('passport');
 const connectDb = require('./configs/db');
 

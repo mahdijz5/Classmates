@@ -1,6 +1,7 @@
 const Post = require("../model/posts");
 const User = require("../model/users");
 const Comment = require("../model/comments");
+const ReplyComment = require("../model/replyComments");
 
 const {auth, notAuth} = require('../middleWares/auth')
 const { convertDate } = require("../utils/convertDate");
@@ -146,14 +147,15 @@ exports.getPost = async (req, res) => {
 	const statusUser = notAuth(req,res)
 
 	try {
+		
 		const post = await Post.findOne({ _id: req.params.id }).populate("user");
 		const comments = await Comment.find({ post: req.params.id })
-			.populate("user")
+			.populate("user").populate("post")
 			.sort({
 				date: "desc",
 			})
 			.limit(6);
-
+		const replyComments = await ReplyComment.find({show : true}).populate("comment").populate("user");
 		if (!post) {
 			return res.redirect("/404");
 		}
@@ -171,6 +173,7 @@ exports.getPost = async (req, res) => {
 			path: "/post",
 			post,
 			convertDate,
+			replyComments,
 		});
 	} catch (error) {
 		console.log(error);
@@ -273,55 +276,92 @@ exports.createComments = async (req, res) => {
 };
 
 exports.replyComments = async (req, res) => {
+	// const statusUser = notAuth(req,res)
+
+	// let errors = {};
+	// const sidebarPost = await Post.find({ status: "public" })
+	// 	.sort({
+	// 		date: "desc",
+	// 	})
+	// 	.limit(6);
+	// try {
+	// 	const targetComments = await Comment.findOne({ _id: req.params.id });
+	// 	const { text } = await req.body;
+
+	// 	if (!targetComments || targetComments.user.toString() == req.user._id) {
+	// 		res.redirect("/404");
+	// 	} else {
+	// 		await Comment.commentValidation({
+	// 			text: targetComments.text,
+	// 			post: targetComments.post,
+	// 			reply: text,
+	// 		});
+
+	// 		targetComments.reply += `
+	// 	<div class=" me-4 p-3 d-block" id="comment">
+	// 	<div>
+	// 		<div class="flex-shrink-0"><img class="rounded-circle" id="commenterProf"
+	// 			src="/uploads/profile/${req.user.profileImg}" alt="..." />
+	// 		</div>
+	// 	<div class="ms-3 mb-3">
+	// 		<div class="fw-bold">${req.user.username} </div>
+	// 		${text} 
+	// 	</div>
+	// 	</div>
+	// 	</div>
+	// 	`;
+	// 		await targetComments.save();
+	// 		res.redirect(`/post/${targetComments.post}`);
+	// 	}
+	// } catch (err) {
+	// 	console.log(err);
+	// 	errors["errors"] = err.errors;
+
+	// 	res.render("post", {
+	// 		auth : statusUser,
+	// 		sidebarPost,
+	// 		pageTitle: "Post",
+	// 		path: "/post",
+	// 		convertDate,
+	// 		errors: errors.errors,
+	// 	});
+	// }
 	const statusUser = notAuth(req,res)
 
 	let errors = {};
+	const commentID = req.params.id;
+	console.log("------------------")
+	console.log(commentID)
+	const comment = await Comment.findOne({ _id: commentID });
+
 	const sidebarPost = await Post.find({ status: "public" })
 		.sort({
 			date: "desc",
 		})
 		.limit(6);
+
 	try {
-		const targetComments = await Comment.findOne({ _id: req.params.id });
+		if (!comment) {
+			return res.redirect("/404");
+		}
+
 		const { text } = await req.body;
 
-		if (!targetComments || targetComments.user.toString() == req.user._id) {
-			res.redirect("/404");
-		} else {
-			await Comment.commentValidation({
-				text: targetComments.text,
-				post: targetComments.post,
-				reply: text,
-			});
-
-			targetComments.reply += `
-		<div class=" me-4 p-3 d-block" id="comment">
-		<div>
-			<div class="flex-shrink-0"><img class="rounded-circle" id="commenterProf"
-				src="/uploads/profile/${req.user.profileImg}" alt="..." />
-			</div>
-		<div class="ms-3 mb-3">
-			<div class="fw-bold">${req.user.username} </div>
-			${text} 
-		</div>
-		</div>
-		</div>
-		`;
-			await targetComments.save();
-			res.redirect(`/post/${targetComments.post}`);
-		}
-	} catch (err) {
-		console.log(err);
-		errors["errors"] = err.errors;
-
-		res.render("post", {
-			auth : statusUser,
-			sidebarPost,
-			pageTitle: "Post",
-			path: "/post",
-			convertDate,
-			errors: errors.errors,
+		await ReplyComment.replyCommentValidation({
+			text,
+			comment: commentID,
 		});
+
+		await ReplyComment.create({
+			text,
+			comment: commentID,
+			user: req.user._id,
+		});
+
+		res.redirect(`back`);
+	} catch (err) {
+		console.log(err)
+		res.redirect(`back`);
 	}
 };
 
