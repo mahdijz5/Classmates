@@ -14,7 +14,7 @@ exports.getRegister = (req,res) => {
 exports.handleRegister =  async (req,res) => {
     const errors = {}
     try {
-        const  {username,password,confirmPassword} = await req.body
+        const  {username,password,confirmPassword,email} = await req.body
     
         const existUsername = await User.findOne({username})
         
@@ -32,13 +32,15 @@ exports.handleRegister =  async (req,res) => {
         await User.userValidation({
             username,
             password,
-            confirmPassword
+            confirmPassword,
+            email : email ? email : "",
         })
 
         await User.create({
             username,
             password,
-            confirmPassword
+            confirmPassword,
+            email : email ? email : "",
         })
 
         req.flash('success','You have successfully registered')

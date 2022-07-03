@@ -257,6 +257,7 @@ exports.setting = async(req,res) => {
         "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
     );
 	res.render('admin/setting.ejs' , {
+		error : req.flash("error"),
 		req,
 		pageTitle : 'setting',
 		path : '/setting',
@@ -307,16 +308,17 @@ exports.changeProfile = async (req, res) => {
 			return res.redirect('/admin/setting')
         }
         if (userExist) {
-            if (userExist.email != user.email) {
-                req.flash('error', "ایمیل  مشابه ایی وجود دارد")
+                if(userExist.username != req.user.username) {
+					req.flash('error', "کاربری با نام مشابه ایی وجود دارد")
 				return res.redirect('/admin/setting')
-            }
+				}
         }
 
         //* profileImg 
         user.username = username;
         console.log(profileImgName);
         user.profileImg = profileImg.name ? profileImgName : user.profileImg
+        user.email = req.body.email ? req.body.email : ""
 
         await user.save()
         return res.redirect('/admin/setting')

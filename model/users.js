@@ -18,6 +18,9 @@ const userSchema = new mongoose.Schema({
 		minlength: 4,
 		maxlength: 80,
 	},
+	email : {
+		type : String
+	},
     createAt : {
         type : Date,
         default : Date.now

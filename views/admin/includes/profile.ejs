@@ -43,6 +43,13 @@
             <input type="text" name="username" id="firstname" class="form-control" value=" <%=req.user.username %>" />
 
         </div>
+        <% if(req.user.email != "") { %>
+            <div class="form-group col-12">
+                <label for="firstname">ایمیل</label>
+                <input type="email" name="email" id="firstname" class="form-control" value=" <%=req.user.email %>" />
+    
+            </div>
+        <% } %>  
     </div>
 
 
