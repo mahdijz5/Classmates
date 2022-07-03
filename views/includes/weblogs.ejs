@@ -14,7 +14,11 @@
 						<%- truncate(post.body ,35) %> 
 					</p>
 					<br>
-					<a href="/post/<%= post.id %> " class="btn btn-primary">... ادامه</a>
+					<div style="position: absolute; left:10px;">
+						<span style="cursor: default;"  class=" btn btn-warning text-left fa fa-eye p-2"> : <%= post.views %> </span>
+						<span  style="cursor: default;" class=" btn btn-danger text-left fa fa-heart-o p-2"> : <%= post.likes %> </span>
+					</div>
+					<a href="/post/<%= post.id %> "  class="btn btn-primary">... ادامه</a>
 				</div>
 			</div>
 		</div>

@@ -3,18 +3,17 @@ const User = require("../model/users");
 const Comment = require("../model/comments");
 const ReplyComment = require("../model/replyComments");
 
-const {auth, notAuth} = require('../middleWares/auth')
+const { auth, notAuth } = require("../middleWares/auth");
 const { convertDate } = require("../utils/convertDate");
 const comments = require("../model/comments");
-const truncate = require('truncate')
+const truncate = require("truncate");
 exports.getIndex = async (req, res) => {
-	
-	const statusUser = notAuth(req,res)
+	const statusUser = notAuth(req, res);
 
 	res.set(
-        "Cache-Control",
-        "no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
-    );
+		"Cache-Control",
+		"no-cache, private, no-store, must-revalidate, max-stale=0, post-check=0, pre-check=0"
+	);
 	const page = +req.query.page || 1;
 	const postPerPage = 6;
 
@@ -35,7 +34,7 @@ exports.getIndex = async (req, res) => {
 	try {
 		res.render("index", {
 			truncate,
-			auth : statusUser,
+			auth: statusUser,
 			sidebarPost,
 			posts,
 			pageTitle: "classmates",
@@ -54,7 +53,7 @@ exports.getIndex = async (req, res) => {
 };
 
 exports.getPostsByGrade = async (req, res) => {
-	const statusUser = notAuth(req,res)
+	const statusUser = notAuth(req, res);
 
 	const page = +req.query.page || 1;
 	const grade = req.query.grade || "others";
@@ -80,7 +79,7 @@ exports.getPostsByGrade = async (req, res) => {
 	try {
 		res.render("index", {
 			truncate,
-			auth : statusUser,
+			auth: statusUser,
 			posts,
 			sidebarPost,
 			pageTitle: "Weblog",
@@ -99,7 +98,7 @@ exports.getPostsByGrade = async (req, res) => {
 };
 
 exports.getPostsByBookName = async (req, res) => {
-	const statusUser = notAuth(req,res)
+	const statusUser = notAuth(req, res);
 
 	const page = +req.query.page || 1;
 	const book = req.query.book || "others";
@@ -125,7 +124,7 @@ exports.getPostsByBookName = async (req, res) => {
 	try {
 		res.render("index", {
 			truncate,
-			auth : statusUser,
+			auth: statusUser,
 			sidebarPost,
 			posts,
 			pageTitle: "Weblog",
@@ -144,29 +143,57 @@ exports.getPostsByBookName = async (req, res) => {
 };
 
 exports.getPost = async (req, res) => {
-	const statusUser = notAuth(req,res)
-
+	const statusUser = notAuth(req, res);
+	
 	try {
-		
+		let liked = false;
 		const post = await Post.findOne({ _id: req.params.id }).populate("user");
+
+		//!Comments
 		const comments = await Comment.find({ post: req.params.id })
-			.populate("user").populate("post")
+			.populate("user")
+			.populate("post")
 			.sort({
 				date: "desc",
 			})
 			.limit(6);
-		const replyComments = await ReplyComment.find({show : true}).populate("comment").populate("user");
+		const replyComments = await ReplyComment.find({ show: true })
+			.populate("comment")
+			.populate("user");
 		if (!post) {
 			return res.redirect("/404");
 		}
+
+		//!SideBar
 		const sidebarPost = await Post.find({ status: "public" })
 			.sort({
 				date: "desc",
 			})
 			.limit(6);
+		//!Count views
+		if (req.isAuthenticated() == true) {
+
+			//!liked or no
+			for (l of post.likedBy) {
+				if (l.toString() == req.user._id.toString()) {
+					liked = true;
+				}
+			}
+
+			let seen = false;
+
+			for (v of post.viewedBy) {
+				if (v.toString() == req.user._id.toString()) seen = true;
+			}
+			if (seen == false) {
+				post.views++;
+				post.viewedBy.push(req.user._id);
+				post.save();
+			}
+		}
 
 		res.render("post", {
-			auth : statusUser,
+			auth: statusUser,
 			comments: comments ? comments : {},
 			sidebarPost,
 			pageTitle: "Post",
@@ -174,6 +201,7 @@ exports.getPost = async (req, res) => {
 			post,
 			convertDate,
 			replyComments,
+			liked,
 		});
 	} catch (error) {
 		console.log(error);
@@ -181,7 +209,7 @@ exports.getPost = async (req, res) => {
 };
 
 exports.handleSearch = async (req, res) => {
-	const statusUser = notAuth(req,res)
+	const statusUser = notAuth(req, res);
 
 	const page = +req.query.page || 1;
 	const book = req.query.book || "others";
@@ -210,7 +238,7 @@ exports.handleSearch = async (req, res) => {
 	try {
 		res.render("index", {
 			truncate,
-			auth : statusUser,
+			auth: statusUser,
 			sidebarPost,
 			posts,
 			pageTitle: "Weblog",
@@ -229,7 +257,7 @@ exports.handleSearch = async (req, res) => {
 };
 
 exports.createComments = async (req, res) => {
-	const statusUser = notAuth(req,res)
+	const statusUser = notAuth(req, res);
 
 	let errors = {};
 	const postID = req.params.id.toString();
@@ -257,14 +285,15 @@ exports.createComments = async (req, res) => {
 			post: postID,
 			user: req.user._id,
 		});
-
+		post.commentsNum++;
+		post.save();
 		res.redirect(`/post/${req.params.id}`);
 	} catch (err) {
 		console.log(err);
 		errors["errors"] = err.errors;
 
 		res.render("post", {
-			auth : statusUser,
+			auth: statusUser,
 			sidebarPost,
 			pageTitle: "Post",
 			path: "/post",
@@ -276,69 +305,9 @@ exports.createComments = async (req, res) => {
 };
 
 exports.replyComments = async (req, res) => {
-	// const statusUser = notAuth(req,res)
-
-	// let errors = {};
-	// const sidebarPost = await Post.find({ status: "public" })
-	// 	.sort({
-	// 		date: "desc",
-	// 	})
-	// 	.limit(6);
-	// try {
-	// 	const targetComments = await Comment.findOne({ _id: req.params.id });
-	// 	const { text } = await req.body;
-
-	// 	if (!targetComments || targetComments.user.toString() == req.user._id) {
-	// 		res.redirect("/404");
-	// 	} else {
-	// 		await Comment.commentValidation({
-	// 			text: targetComments.text,
-	// 			post: targetComments.post,
-	// 			reply: text,
-	// 		});
-
-	// 		targetComments.reply += `
-	// 	<div class=" me-4 p-3 d-block" id="comment">
-	// 	<div>
-	// 		<div class="flex-shrink-0"><img class="rounded-circle" id="commenterProf"
-	// 			src="/uploads/profile/${req.user.profileImg}" alt="..." />
-	// 		</div>
-	// 	<div class="ms-3 mb-3">
-	// 		<div class="fw-bold">${req.user.username} </div>
-	// 		${text} 
-	// 	</div>
-	// 	</div>
-	// 	</div>
-	// 	`;
-	// 		await targetComments.save();
-	// 		res.redirect(`/post/${targetComments.post}`);
-	// 	}
-	// } catch (err) {
-	// 	console.log(err);
-	// 	errors["errors"] = err.errors;
-
-	// 	res.render("post", {
-	// 		auth : statusUser,
-	// 		sidebarPost,
-	// 		pageTitle: "Post",
-	// 		path: "/post",
-	// 		convertDate,
-	// 		errors: errors.errors,
-	// 	});
-	// }
-	const statusUser = notAuth(req,res)
-
-	let errors = {};
 	const commentID = req.params.id;
-	console.log("------------------")
-	console.log(commentID)
-	const comment = await Comment.findOne({ _id: commentID });
 
-	const sidebarPost = await Post.find({ status: "public" })
-		.sort({
-			date: "desc",
-		})
-		.limit(6);
+	const comment = await Comment.findOne({ _id: commentID });
 
 	try {
 		if (!comment) {
@@ -360,13 +329,13 @@ exports.replyComments = async (req, res) => {
 
 		res.redirect(`back`);
 	} catch (err) {
-		console.log(err)
+		console.log(err);
 		res.redirect(`back`);
 	}
 };
 
 exports.profile = async (req, res) => {
-	const statusUser = notAuth(req,res)
+	const statusUser = notAuth(req, res);
 
 	const sidebarPost = await Post.find({ status: "public" })
 		.sort({
@@ -383,9 +352,10 @@ exports.profile = async (req, res) => {
 		}
 
 		const numberOfPosts = await Post.find({
-			user: user.id , status : 'public'
+			user: user.id,
+			status: "public",
 		}).countDocuments();
-		const posts = await Post.find({ user: user.id , status : 'public' })
+		const posts = await Post.find({ user: user.id, status: "public" })
 			.sort({
 				date: "desc",
 			})
@@ -394,7 +364,7 @@ exports.profile = async (req, res) => {
 
 		res.render("profile", {
 			truncate,
-			auth : statusUser,
+			auth: statusUser,
 			pageTitle: user.username,
 			path: "/profile",
 			sidebarPost,
@@ -411,5 +381,42 @@ exports.profile = async (req, res) => {
 		});
 	} catch (err) {
 		console.log(err);
+	}
+};
+
+exports.getLikes = async (req, res) => {
+	try {
+		const postID = req.params.id;
+		const post = await Post.findOne({ _id: req.params.id });
+
+		if (req.isAuthenticated() == true) {
+			let liked = false;
+
+			if (post.likedBy.length > 0) {
+				for (l of post.likedBy) {
+					if (l.toString() == req.user._id.toString()) {
+						liked = true;
+					}
+
+					if (liked == false) {
+						post.likes++;
+						post.likedBy.push(req.user._id);
+						post.save();
+					} else {
+						post.likes--;
+						post.likedBy = post.likedBy.filter(
+							(p) => p.toString() != req.user._id.toString()
+						);
+						post.save();
+					}
+				}
+			} else {
+				post.likes++;
+				post.likedBy.push(req.user._id);
+				post.save();
+			}
+		}
+	} catch (error) {
+		console.log(error);
 	}
 };

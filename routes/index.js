@@ -22,6 +22,10 @@ router.get('/book',indexController.getPostsByBookName)
 //@desc get single post
 router.get('/post/:id',indexController.getPost)
 
+// @route Get /post/:id
+//@desc get single post
+router.post('/post/like/:id',indexController.getLikes)
+
 // @route POST /post/comments
 //@desc create new comment
 router.post('/post/comments/:id',auth,indexController.createComments)

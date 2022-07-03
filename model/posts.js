@@ -40,7 +40,27 @@ const blogSchema = new mongoose.Schema({
     thumbnail : {
         type : String,
         required: true
-    }
+    },
+    views: {
+        type : Number,
+        default : 0,
+    },
+    viewedBy : [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }],
+    commentsNum : {
+        type : Number,
+        default : 0,
+    },
+    likes: {
+        type : Number,
+        default : 0,
+    },
+    likedBy : [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+    }],
 })
 
 

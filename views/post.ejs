@@ -1,40 +1,92 @@
+<!-- Page content-->
+<div class="container mt-5">
+    <div class="row px-5">
+        <div class="col-12 ">
+            <!-- Post content-->
+            <article>
+                <!-- Post header-->
+                <header class="mb-4">
+                    <!-- Post title-->
+                    <h1 class="fw-bolder mb-1">
+                        <%= post.title %>
+                    </h1>
+                    <!-- Post meta content-->
+                    <div class="text-muted fst-italic mb-2">ساخته شده در تاریخ <%= convertDate(post.createdOn) %>
+                            توسط <a href="/profile/<%= post.user.id %> ">
+                                <%= post.user.username%>
+                            </a>
+                    </div>
 
-    <!-- Page content-->
-    <div class="container mt-5">
-        <div class="row px-5" >
-            <div class="col-12 ">
+                </header>
+                <!-- Preview image figure-->
+                <figure class="mb-4">
+                    <img class="img-fluid rounded" src="http://localhost:3000/uploads/thumbnail/<%= post.thumbnail %>"
+                        alt="" />
+
+                </figure>
                 <!-- Post content-->
-                <article >
-                    <!-- Post header-->
-                    <header class="mb-4">
-                        <!-- Post title-->
-                        <h1 class="fw-bolder mb-1">
-                            <%= post.title %>
-                        </h1>
-                        <!-- Post meta content-->
-                        <div class="text-muted fst-italic mb-2">ساخته شده در تاریخ <%= convertDate(post.createdOn) %>
-                                توسط <a href="/profile/<%= post.user.id %> ">
-                                    <%= post.user.username%>
-                                </a>
-                        </div>
+                <section class="mb-5" id="cardBody">
+                    <div class="fs-5 mb-4" id="body">
+                        <%-post.body%>
+                    </div>
+                </section>
+            </article>
 
-                    </header>
-                    <!-- Preview image figure-->
-                    <figure class="mb-4">
-                        <img class="img-fluid rounded"
-                            src="http://localhost:3000/uploads/thumbnail/<%= post.thumbnail %>" alt="" />
-
-                    </figure>
-                    <!-- Post content-->
-                    <section class="mb-5" id="cardBody">
-                        <div class="fs-5 mb-4" id="body">
-                            <%-post.body%>
-                        </div>
-                    </section>
-                </article>
-                <!-- Comments section-->
-                <%- include('./includes/postComments.ejs') %> 
+            <div class="my-3">
+                <button class="btn btn-secondary fa fa-comment-o">: <%= post.commentsNum %> </button>
+                <% if(auth==false) { %>
+                    <% if(liked==false) { %> 
+                        <button class="btn btn-danger fa fa-heart-o" data-like="true" onclick="like()" type="submit" id="like"> 
+                        <%= post.likes %>
+                        </button>
+                    <% }else { %> 
+                        <button class="btn btn-danger fa fa-heart" data-like="false" onclick="like()" type="submit" id="like"> 
+                            <%= post.likes %>
+                            </button>
+                    <% } %> 
+                <% }else {%>
+                    <button class="btn btn-danger fa fa-heart-o" type="submit" disabled > 
+                    <%= post.likes %>
+                    </button>
+                <% } %>  
+                <button class="btn btn-warning fa fa-eye">:<%= post.views %></button>
             </div>
-
+            <!-- Comments section-->
+            <%- include('./includes/postComments.ejs') %>
         </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"
+            integrity="sha256-/xUj+3OJU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous">
+            </script>
+        <script>
+            $(document).ready(function () {
+                $("#like").click(function () {
+                    $.post(`/post/like/<%= post.id %>`,
+                        function (data, status) {
+                            console.log(data);
+                        });
+                });
+            });
+
+            const like = () => {
+                const likeBtn = document.getElementById("like");
+                const condition = likeBtn.getAttribute("data-like")
+                
+                console.log(condition)
+                if (condition == "true") {
+                    likeBtn.classList = "btn btn-danger fa fa-heart"
+                    let likeNum = parseInt(likeBtn.innerHTML);
+                    likeNum++;
+                    likeBtn.innerHTML = " "+likeNum;
+                    likeBtn.setAttribute("data-like","false")
+                } else {
+                    likeBtn.classList = "btn btn-danger fa fa-heart-o"
+                    let likeNum = parseInt(likeBtn.innerHTML);
+                    likeNum--;
+                    likeBtn.innerHTML = " "+likeNum;
+                    likeBtn.setAttribute("data-like","true")
+                }
+            }
+
+        </script>
     </div>
+</div>

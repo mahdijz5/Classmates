@@ -23,7 +23,8 @@ const commentsSchema = new mongoose.Schema({
     isItReply :{ 
         type:String,
         default: ''
-    }
+    },
+
 })
 
 commentsSchema.statics.commentValidation= function(body) {
